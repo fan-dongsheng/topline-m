@@ -30,19 +30,37 @@
 
         <!-- 登录按钮 -->
         <div class="login-button">
-           <van-button type="info">登录</van-button>
+           <van-button @click="onLogin" type="info">登录</van-button>
         </div>
 
   </div>
 </template>
 
 <script>
+import request from '@/utils/request'
 export default {
   data () {
     return {
       user: {
         mobile: '',
         code: ''
+      }
+    }
+  },
+  methods: {
+    // 登录
+    async onLogin () {
+      // 获取表单数据;
+      const user = this.user
+      try {
+        const res = await request({
+          method: 'POST',
+          url: '/app/v1_0/authorizations',
+          data: user
+        })
+        console.log('登录成功', res)
+      } catch (error) {
+        console.log('登录失败', error)
       }
     }
   }
