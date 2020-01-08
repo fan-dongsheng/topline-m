@@ -6,6 +6,7 @@ import 'amfe-flexible' // rem适配
 
 // vant组件
 import './utils/register-vant'
+import './styles/index.less' // 引入全局样式,放在第三方样式之后
 
 Vue.config.productionTip = false
 
