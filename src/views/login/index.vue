@@ -23,9 +23,21 @@
 
               >
               <i slot="left-icon" class="icon icon-suo"></i>
-              <van-button class="code" slot="button"  size="small" round type="info">发送验证码</van-button>
+              <van-button
+              v-if="!isShow" class="code"
+              slot="button"  size="small"
+              round type="info" @click="sendCode">发送验证码</van-button>
+               <van-count-down
+                  v-else
+                  slot="button"
+                  :time="1000*60"
+                  format="ss 秒"
+                  @finish="isShow=false"
+                />
+                <!-- finish是倒计时的一个时间,倒计时结束后执行事件 -->
 
               </van-field>
+
                </van-cell-group>
 
         <!-- 登录按钮 -->
@@ -37,14 +49,16 @@
 </template>
 
 <script>
-import { login } from '@/api/user.js' // 引用封装好的请求接口
+import { login, sendCodeSms } from '@/api/user.js' // 引用封装好的请求接口,统一引用
 export default {
   data () {
     return {
       user: {
         mobile: '',
         code: ''
-      }
+      },
+      // 发送验证码显示隐藏;
+      isShow: false
     }
   },
   methods: {
@@ -67,6 +81,18 @@ export default {
       } catch (error) {
         console.log('登录失败', error)
         this.$toast('登录失败')
+      }
+    },
+
+    // 发送验证码;
+    async sendCode () {
+      const { mobile } = this.user // 解构赋值方式获取mobile
+      this.isShow = true
+      try {
+        let res = await sendCodeSms(mobile)
+        console.log('成功', res)
+      } catch (error) {
+        console.log('发送验证码失败', error)
       }
     }
   }

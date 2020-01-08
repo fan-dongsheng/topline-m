@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import { Button, Icon, NavBar, CellGroup, Field, Toast } from 'vant'
+import { Button, Icon, NavBar, CellGroup, Field, Toast, CountDown } from 'vant'
 
 Vue.use(Button)
   .use(Icon)
@@ -8,3 +8,4 @@ Vue.use(Button)
   .use(CellGroup)
   .use(Field)
   .use(Toast)
+  .use(CountDown)

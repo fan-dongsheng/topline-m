@@ -7,3 +7,9 @@ export const login = data => {
     data
   })
 }
+export const sendCodeSms = mobile => {
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/sms/codes/${mobile}`
+  })
+}
