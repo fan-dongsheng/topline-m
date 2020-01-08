@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+import { login } from '@/api/user.js' // 引用封装好的请求接口
 export default {
   data () {
     return {
@@ -48,19 +48,25 @@ export default {
     }
   },
   methods: {
+
     // 登录
     async onLogin () {
       // 获取表单数据;
       const user = this.user
+      this.$toast.loading({
+        message: '登录中...',
+        duration: 0, // 持续展示;
+        forbidClick: true
+      })
+
       try {
-        const res = await request({
-          method: 'POST',
-          url: '/app/v1_0/authorizations',
-          data: user
-        })
+        const res = await login(user)
+
         console.log('登录成功', res)
+        this.$toast('登录成功')
       } catch (error) {
         console.log('登录失败', error)
+        this.$toast('登录失败')
       }
     }
   }
