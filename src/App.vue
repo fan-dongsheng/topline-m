@@ -11,6 +11,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+//  @import '~@/styles/variables.less';
+ @import url('~@/styles/variables.less');
+p{
+  color: @color-primse;
+};
+.icon{
+  font-size: 50px;
+}
 
 </style>
