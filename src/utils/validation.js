@@ -25,7 +25,7 @@ Object.keys(rules).forEach(rule => {
 // 手机号验证规则; 需要在rules用管道 | mobile 添加,多个规则
 extend('mobile', {
   validate: value => {
-    return /^1(3|5|6|7|8|9)\d{9}$/.test(value)
+    return /^1(3|5|6|7|8|9)\d{9}$/.test(value) // 这个value就是参数,手机号或者验证码,被验证的数据,返回true或false
   },
   message: '手机号码格式错误'
 })

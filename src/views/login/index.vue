@@ -5,8 +5,8 @@
     <!-- 输入框 -->
     <!-- <ValidationProvider>校验组件 -->
     <ValidationObserver ref="form">
-
-          <ValidationProvider name="手机号" rules="required | mobile" v-slot="{ errors }" immediate>
+          <!-- 注意required|mobile 管道前后不许加空格 -->
+          <ValidationProvider name="手机号" rules="required|mobile" v-slot="{ errors }" immediate>
                 <van-field
                 v-model="user.mobile"
 
@@ -21,7 +21,7 @@
             <!-- <span>{{ errors[0] }}</span> -->
             </ValidationProvider>
 
-            <ValidationProvider name="验证码" rules="required | code" immediate>
+            <ValidationProvider name="验证码" rules="required|code" immediate>
 
               <van-field
                   v-model="user.code"
@@ -105,7 +105,7 @@ export default {
         this.$toast('登录成功')
       } catch (error) {
         console.log('登录失败', error)
-        this.$toast('登录失败')
+        this.$toast('登录失败', '手机号或验证码错误')
       }
     },
 
