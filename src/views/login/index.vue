@@ -58,6 +58,7 @@
 
 <script>
 import { login, sendCodeSms } from '@/api/user.js' // 引用封装好的请求接口,统一引用
+import { validate } from 'vee-validate' // 引入发送验证码 数据字段验证方法;
 export default {
   data () {
     return {
@@ -112,6 +113,20 @@ export default {
     // 发送验证码;
     async sendCode () {
       const { mobile } = this.user // 解构赋值方式获取mobile
+      // 验证手机号
+      // 第一个参数是验证的数据,第二个是规则,第三个是字段名;
+      const validateResult = await validate(mobile, 'required|mobile', {
+        name: '手机号'
+      })
+      // 返回值：{ valid, errors, ... }
+      //  valid: 验证是否成功，成功 true，失败 false
+      // errors：一个数组，错误提示消息
+      console.log(validateResult.valid, validateResult.errors)
+
+      if (!validateResult.valid) {
+        this.$toast(validateResult.errors[0])
+        return
+      }
       this.isShow = true
       try {
         let res = await sendCodeSms(mobile)
