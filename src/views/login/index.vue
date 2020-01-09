@@ -3,8 +3,10 @@
     <!-- 头部 -->
         <van-nav-bar title="标题"/>
     <!-- 输入框 -->
-        <van-cell-group>
+    <!-- <ValidationProvider>校验组件 -->
+    <ValidationObserver ref="form">
 
+          <ValidationProvider name="手机号" rules="required | mobile" v-slot="{ errors }" immediate>
                 <van-field
                 v-model="user.mobile"
 
@@ -15,6 +17,11 @@
             <i slot="left-icon" class="icon icon-phone_icon"></i>
 
             </van-field>
+            <!-- //错误消息获取,提示 -->
+            <!-- <span>{{ errors[0] }}</span> -->
+            </ValidationProvider>
+
+            <ValidationProvider name="验证码" rules="required | code" immediate>
 
               <van-field
                   v-model="user.code"
@@ -37,8 +44,9 @@
                 <!-- finish是倒计时的一个时间,倒计时结束后执行事件 -->
 
               </van-field>
+              </ValidationProvider>
 
-               </van-cell-group>
+               </ValidationObserver>
 
         <!-- 登录按钮 -->
         <div class="login-button">
@@ -65,8 +73,25 @@ export default {
 
     // 登录
     async onLogin () {
-      // 获取表单数据;
+      // 1. 获取表单数据;
       const user = this.user
+      // 2.表单验证
+      const success = await this.$refs.form.validate() // 手动校验
+      if (!success) {
+        // 表单验证失败处理
+        console.log('验证失败')
+        const errors = this.$refs.form.errors // 通过this.$resfs指向组件实例,组建中有errors变量,可以调用
+        // errors中的数据,需要失去焦点才能有数据,所以要在组建中加一个属性 immediate 立即获取
+        // errors是一个对象,值是数组,for in 遍历对象,key是键, errors[key]是值,
+        for (let key in errors) {
+          const item = errors[key]
+          if (item[0]) {
+            this.$toast(item[0]) // 找到第1个有错误的消息，给出提示，停止遍历
+            return
+          }
+        }
+      }
+      // 表单验证通过处理
       this.$toast.loading({
         message: '登录中...',
         duration: 0, // 持续展示;

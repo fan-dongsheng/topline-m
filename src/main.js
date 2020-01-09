@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'amfe-flexible' // rem适配
+import './utils/validation.js' // 引入校验组件
 
 // vant组件
 import './utils/register-vant'
