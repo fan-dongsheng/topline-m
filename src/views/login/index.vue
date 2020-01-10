@@ -100,9 +100,16 @@ export default {
       })
 
       try {
-        const res = await login(user)
+        // 优化,用结构赋值 const { data} =await login(user)  取出data
+        // const res = await login(user)
+        const { data } = await login(user)
+        console.log('登录成功', data)
+        // 获取token;在res.data.data中有token;
+        // const userToken = res.data.data
+        // 优化,data是优化的 里面有data可以直接取到token
+        const userToken = data.data
+        this.$store.commit('getUserToken', userToken)
 
-        console.log('登录成功', res)
         this.$toast('登录成功')
       } catch (error) {
         console.log('登录失败', error)
