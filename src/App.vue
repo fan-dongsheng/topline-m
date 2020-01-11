@@ -12,6 +12,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 //  @import '~@/styles/variables.less';
  @import url('~@/styles/variables.less');
 p{

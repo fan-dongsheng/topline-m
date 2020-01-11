@@ -111,6 +111,7 @@ export default {
         this.$store.commit('getUserToken', userToken)
 
         this.$toast('登录成功')
+        this.$router.push('/')
       } catch (error) {
         console.log('登录失败', error)
         this.$toast('登录失败', '手机号或验证码错误')
