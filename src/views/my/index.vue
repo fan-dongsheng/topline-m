@@ -20,7 +20,7 @@
              <div class="loginShow" v-else>
                  <div class="login-user">
                      <div class="username">
-                     <van-image src="https://img.yzcdn.cn/vant/cat.jpeg"
+                     <van-image :src="user.photo"
                                 round
                                 width="70"
                                 height="70">
@@ -29,26 +29,26 @@
                                     </template>
 
                     </van-image>
-                    <span>小黑</span>
+                    <span>{{user.name}}</span>
                     </div>
 
                     <van-button round type="info" size="small" class="btn" >编辑资料</van-button>
                                     </div>
                 <div class="bottom">
                     <div class="bottom-cont">
-                        <span>122</span>
+                        <span>{{user.art_count}}</span>
                         <span>头条</span>
                         </div>
                      <div class="bottom-cont">
-                        <span>123</span>
+                        <span>{{user.follow_count}}</span>
                         <span>关注</span>
                         </div>
                      <div class="bottom-cont">
-                        <span>123</span>
+                        <span>{{user.fans_count}}</span>
                         <span>粉丝</span>
                         </div>
                      <div class="bottom-cont">
-                        <span>123</span>
+                        <span>{{user.like_count}}</span>
                         <span>获赞</span>
                     </div>
                 </div>
@@ -99,6 +99,8 @@ export default {
     async loadInfo () {
       try {
         const { data } = await getUserInfo()
+        console.log(data)
+
         this.user = data.data
         console.log('验证成功')
       } catch (error) {
