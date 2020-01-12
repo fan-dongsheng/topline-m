@@ -4,7 +4,7 @@ import jsonBig from 'json-bigint' // 处理后端返回数据超出安全整数�
 import store from '@/store' // store导出的是store实例组件,可以直接store.state获取  和this.$store一样
 
 const request = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn' // 基础路径
+  baseURL: 'http://ttapi.research.itcast.cn/' // 基础路径
 })
 
 export default request

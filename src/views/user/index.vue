@@ -1,30 +1,30 @@
 <template>
     <div class="user-container">
         <!-- //导航 -->
-        <van-nav-bar title="标题" left-arrow/>
+        <van-nav-bar :title="user.name" left-arrow/>
         <!-- 头部组件 -->
         <div class="userInfo">
             <van-image
             class="img"
                 round
-                src="https://img.yzcdn.cn/vant/cat.jpeg"
+                :src="user.photo"
             />
             <div class="right">
                 <div class="vans">
                      <div class="vans-cont">
-                        <span>123</span>
+                        <span>{{user.art_count}}</span>
                         <span>头条</span>
                         </div>
                      <div class="vans-cont">
-                        <span>123</span>
+                        <span>{{user.follow_count}}</span>
                         <span>关注</span>
                         </div>
                      <div class="vans-cont">
-                        <span>123</span>
+                        <span>{{user.fans_count}}</span>
                         <span>粉丝</span>
                         </div>
                      <div class="vans-cont">
-                        <span>123</span>
+                        <span>{{user.like_count}}</span>
                         <span>获赞</span>
                     </div>
                 </div>
@@ -40,14 +40,36 @@
         <!-- //简介 -->
         <div class="introduc">
             <span>简介:</span>
-            <span>安利个威风威风</span>
+            <span>{{user.intro}}</span>
         </div>
 
     </div>
 </template>
 
 <script>
+import { getUserInfoById } from '@/api/user' // 引入api接口
 export default {
+  data () {
+    return {
+      user: {}
+    }
+  },
+  methods: {
+    // 获取指定用户信息;传id
+    async getUserById () {
+      try {
+        const { data } = await getUserInfoById(this.$route.params.id)
+        this.user = data.data
+        console.log(data)
+      } catch (error) {
+        console.log('获取失败')
+        this.$toast('获取用户数据失败')
+      }
+    }
+  },
+  created () {
+    this.getUserById()
+  }
 
 }
 </script>
