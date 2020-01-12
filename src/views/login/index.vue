@@ -63,8 +63,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       // 发送验证码显示隐藏;
       isShow: false

@@ -3,7 +3,9 @@
       <!-- 未登录显示 -->
       <div class="top" v-if="!$store.state.user">
 
-          <van-image src="https://img.yzcdn.cn/vant/cat.jpeg"
+          <van-image
+          @click="login"
+          src="https://img.yzcdn.cn/vant/cat.jpeg"
             round
             width="70"
             height="70">
@@ -11,7 +13,7 @@
                     <van-loading type="spinner" size="20" />
                 </template>
             </van-image>
-            <div class="text">点击登录</div>
+            <div class="text" @click="login">点击登录</div>
 
       </div>
         <!-- //登录时显示 -->
@@ -80,8 +82,37 @@
 </template>
 
 <script>
-export default {
+import { getUserInfo } from '@/api/user'
 
+export default {
+  data () {
+    return {
+      user: {}
+    }
+  },
+  methods: {
+
+    login () {
+      this.$router.push('/login')
+    },
+    // 获取用户信息个人;
+    async loadInfo () {
+      try {
+        const { data } = await getUserInfo()
+        this.user = data.data
+        console.log('验证成功')
+      } catch (error) {
+        console.log('获取用户信息失败', error)
+      }
+    }
+
+  },
+  created () {
+    // 先判断有没有登录,登录之后才能获取;
+    if (this.$store.state.user) {
+      this.loadInfo()
+    }
+  }
 }
 </script>
 

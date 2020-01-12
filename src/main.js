@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import 'amfe-flexible' // rem适配
 import './utils/validation.js' // 引入校验组件
-
+// import './utils/request'
 // vant组件
 import './utils/register-vant'
 import './styles/index.less' // 引入全局样式,放在第三方样式之后

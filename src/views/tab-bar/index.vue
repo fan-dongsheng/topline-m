@@ -1,7 +1,7 @@
 <template>
   <div class="tabbar">
       <router-view></router-view>
-        <van-tabbar v-model="active" >
+        <van-tabbar route>
             <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
             <van-tabbar-item icon="search" to="/question">问答</van-tabbar-item>
             <van-tabbar-item icon="friends-o" to="/video">视频</van-tabbar-item>
@@ -14,7 +14,7 @@
 export default {
   data () {
     return {
-      active: 0
+
     }
   }
 
