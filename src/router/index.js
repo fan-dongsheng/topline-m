@@ -37,6 +37,12 @@ const routes = [
         component: () => import('@/views/my')
       }
     ]
+  },
+  // 用户页面路由;
+  {
+    path: '/user/:id',
+    component: () => import('@/views/user')
+
   }
 ]
 
