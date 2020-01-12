@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import { Button, Icon, NavBar, CellGroup, Field, Toast, CountDown, Tabbar, TabbarItem,
-  Image, Loading, Grid, GridItem, Cell, Dialog } from 'vant'
+  Image, Loading, Grid, GridItem, Cell, Dialog, List } from 'vant'
 
 Vue.use(Button)
   .use(Icon)
@@ -18,3 +18,4 @@ Vue.use(Button)
   .use(GridItem)
   .use(Cell)
   .use(Dialog)
+  .use(List)

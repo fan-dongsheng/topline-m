@@ -22,7 +22,7 @@ export const getUserInfo = () => {
     url: '/app/v1_0/user'
   })
 }
-// 获取指定用户信息;
+// 用户页面-获取指定用户信息;
 export const getUserInfoById = (id) => {
   return request({
     method: 'GET',

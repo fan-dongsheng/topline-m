@@ -43,15 +43,35 @@
             <span>{{user.intro}}</span>
         </div>
 
+        <!-- 列表 -->
+        <van-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+            >
+            <van-cell
+                v-for="(item,index) in list"
+                :key="index"
+                :title="item.title"
+            />
+        </van-list>
+
     </div>
 </template>
 
 <script>
 import { getUserInfoById } from '@/api/user' // 引入api接口
+import { getUserArticle } from '@/api/article' // 引入文章接口
 export default {
   data () {
     return {
-      user: {}
+      user: {},
+      list: [],
+      loading: false,
+      finished: false,
+      page: 1
+
     }
   },
   methods: {
@@ -65,7 +85,36 @@ export default {
         console.log('获取失败')
         this.$toast('获取用户数据失败')
       }
+    },
+    // 列表加载
+    async onLoad () {
+      try {
+        // 异步更新数据
+        const { data } = await getUserArticle(
+          this.$route.params.id, {
+            page: this.page,
+            per_page: 20
+          }
+        )
+        const { results } = data.data
+        // 由于results是一个数组,list也是数组,push到list
+        // ...[1, 2, 3] 会把数组给展开，所谓的展开就是一个一个的拿出来
+        this.list.push(...results) // 用拓展字符可以将数组分解成一个一个的数字;
+
+        // 加载状态结束
+        this.loading = false
+
+        // 数据全部加载完成
+        if (results.length) {
+          this.page++ // 如果获取的数组还有长度,就让page加一,获取下一页数据;
+        } else {
+          this.finished = true
+        }
+      } catch (error) {
+        console.log('请求错误', error)
+      }
     }
+
   },
   created () {
     this.getUserById()
