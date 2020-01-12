@@ -76,6 +76,7 @@
         <van-button type="default"
         style="width:100%;margin-top:10px;"
          v-if="$store.state.user"
+         @click="outLogin"
 
          >退出登录</van-button>
   </div>
@@ -106,6 +107,18 @@ export default {
       } catch (error) {
         console.log('获取用户信息失败', error)
       }
+    },
+    // 退出登录
+    outLogin () {
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '确认退出吗'
+      }).then(() => {
+        // on confirm
+        this.$store.commit('getUserToken', null)
+      }).catch(() => {
+        // on cancel
+      })
     }
 
   },
