@@ -6,7 +6,10 @@
             <van-tab v-for="item in channels"
              :key="item.id"
              :title="item.name"
-             >内容 1</van-tab>
+             >
+             <!-- 将每个频道传给子组件list,让子组件知道是哪个频道数据 -->
+             <article-list :channel='item'/>
+             </van-tab>
 
         </van-tabs>
   </div>
@@ -15,12 +18,16 @@
 <script>
 // 这里引入一个函数必须加{}大括号
 import { getChannels } from '@/api/channel' // 引入频道接口
+import articleList from './components/article-list' // 引入首页面的list文章列表;
 export default {
   data () {
     return {
       active: 1,
       channels: [] // 频道列表
     }
+  },
+  components: {
+    articleList
   },
   methods: {
     // 获取频道列表
