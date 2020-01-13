@@ -1,7 +1,7 @@
 <template>
     <div class="user-container">
         <!-- //导航 -->
-        <van-nav-bar :title="user.name" left-arrow/>
+        <van-nav-bar :title="user.name" left-arrow @click-left="$router.back()"/>
         <!-- 头部组件 -->
         <div class="userInfo">
             <van-image

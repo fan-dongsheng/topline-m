@@ -19,7 +19,7 @@
         <!-- //登录时显示 -->
              <div class="loginShow" v-else>
                  <div class="login-user">
-                     <div class="username">
+                     <div class="username" @click="$router.push('/user/'+user.id)">
                      <van-image :src="user.photo"
                                 round
                                 width="70"
