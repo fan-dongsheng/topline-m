@@ -1,5 +1,6 @@
 <template>
     <!-- 首页的频道展示文章列表 -->
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <van-list
         v-model="loading"
         :finished="finished"
@@ -13,6 +14,7 @@
             :title="item.title"
         />
     </van-list>
+    </van-pull-refresh>
 
 </template>
 
@@ -25,7 +27,8 @@ export default {
       loading: false,
       finished: false,
       timestamp: null, // 时间戳 ,用于请求下一次列表的
-      with_top: '' // 是否置顶
+      with_top: '', // 是否置顶
+      isLoading: false // 下拉刷新的
     }
   },
   // 接收父传子的属性;
@@ -36,6 +39,7 @@ export default {
     }
   },
   methods: {
+    // 首页的频道list列表加载
     async onLoad () {
       // 异步更新数据
 
@@ -63,7 +67,25 @@ export default {
       } else {
         this.finished = true
       }
+    },
+    // 下拉刷新获取最新数据,传最新的时间戳
+    async onRefresh () {
+      // 请求数据
+      const { data } = await getHomeArticle({
+        channel_id: this.channel.id,
+        timestamp: Date.now(), // 只需要传最新数据就可以
+        with_top: 1
+      })
+      // 将数据添加到list列表中
+      const { results } = data.data
+
+      this.list.unshift(...results)
+      // 加载状态结束
+      this.isLoading = false
+      // 数据全部加载完成
+      this.$toast(`刷新了${results.length}条数据`)
     }
+
   }
 
 }
