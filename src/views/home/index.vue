@@ -4,6 +4,8 @@
       <!-- //导航 -->
         <van-nav-bar title="首页" fixed/>
         <van-tabs v-model="active">
+          <!-- //右侧面包屑 -->
+          <van-icon name="wap-nav" slot="nav-right" @click="show=true" />
             <van-tab v-for="item in channels"
              :key="item.id"
              :title="item.name"
@@ -13,6 +15,14 @@
              </van-tab>
 
         </van-tabs>
+        <!-- 弹层 -->
+        <van-popup
+          v-model="show"
+          position="bottom"
+          closeable
+          close-icon-position="top-left"
+          :style="{ height: '90%' }"
+        />
   </div>
 </template>
 
@@ -24,7 +34,8 @@ export default {
   data () {
     return {
       active: 1,
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      show: false // 弹出层
     }
   },
   components: {
@@ -61,6 +72,13 @@ export default {
   left:0;
   right:0;
   z-index: 1;
+}
+.van-icon-wap-nav{
+    position: fixed;
+    right: 0;
+    background: #fff;
+    line-height: 44px;
+    opacity: 0.9;
 }
 
 }
