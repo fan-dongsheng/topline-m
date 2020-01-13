@@ -22,7 +22,10 @@
           closeable
           close-icon-position="top-left"
           :style="{ height: '90%' }"
-        />
+        >
+        <!-- //弹层编辑组件 -->
+        <channel-edit :channel="channels" />
+          </van-popup>
   </div>
 </template>
 
@@ -30,6 +33,7 @@
 // 这里引入一个函数必须加{}大括号
 import { getChannels } from '@/api/channel' // 引入频道接口
 import articleList from './components/article-list' // 引入首页面的list文章列表;
+import channelEdit from './components/channel-edit' // 引入弹层频道编辑组件
 export default {
   data () {
     return {
@@ -39,7 +43,8 @@ export default {
     }
   },
   components: {
-    articleList
+    articleList,
+    channelEdit
   },
   methods: {
     // 获取频道列表
@@ -79,6 +84,9 @@ export default {
     background: #fff;
     line-height: 44px;
     opacity: 0.9;
+}
+.van-popup--bottom{
+  padding-top: 40px;
 }
 
 }
