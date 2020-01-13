@@ -24,7 +24,7 @@
           :style="{ height: '90%' }"
         >
         <!-- //弹层编辑组件 -->
-        <channel-edit :channel="channels" />
+        <channel-edit :channels="channels" />
           </van-popup>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       active: 1,
-      channels: [], // 频道列表
+      channels: [], // 我的频道列表
       show: false // 弹出层
     }
   },

@@ -3,13 +3,13 @@
       <!-- //首页弹层频道编辑组件 -->
 
         <van-cell title="我的频道" :border="false" >
-                <van-button round style="background:red;color:#fff;" slot="right-icon" size="mini">编辑</van-button>
+            <van-button round style="background:red;color:#fff;" slot="right-icon" size="mini">编辑</van-button>
 
         </van-cell>
         <!-- 宫格内容 -->
-        <van-grid :gutter="10">
+        <van-grid :gutter="10" >
             <van-grid-item
-                v-for="item in channel"
+                v-for="item in channels"
                 :key="item.id"
 
                 :text="item.name"
@@ -19,10 +19,10 @@
         <van-cell title="频道编辑" :border="false" />
             <van-grid :gutter="10">
             <van-grid-item
-                v-for="value in 8"
-                :key="value"
+                v-for="value in remainingChannels"
+                :key="value.id"
 
-                text="文字"
+                :text="value.name"
             />
         </van-grid>
 
@@ -39,7 +39,7 @@ export default {
   },
   // 从父组件home中拿到channels的数据
   props: {
-    channel: {
+    channels: {
       type: Array,
       required: true
     }
@@ -53,6 +53,23 @@ export default {
     }
 
   },
+  computed: {
+    // 计算剩余频道的
+    remainingChannels () {
+      const remainChannels = [] // 定义一个空数组接收剩余的频道
+      const { allChannels, channels } = this // 结构全部频道 和我的频道;
+      console.log(allChannels, channels)
+
+      // 遍历全部频道
+      allChannels.forEach(item => {
+        // 在我的频道channels中遍历,找到和全部频道一样的 就行排除;
+        if (!channels.find(same => same.id === item.id)) {
+          remainChannels.push(item)
+        }
+      })
+      return remainChannels
+    }
+  },
   created () {
     this.loadAllChannels()
   }
@@ -61,5 +78,8 @@ export default {
 </script>
 
 <style lang='less' scoped>
+/deep/ .van-grid-item__content{
+    background:rgb(212, 209, 209);
+}
 
 </style>
