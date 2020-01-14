@@ -84,6 +84,7 @@ export default {
     background: #fff;
     line-height: 44px;
     opacity: 0.9;
+    font-size: 20px;
 }
 .van-popup--bottom{
   padding-top: 40px;
