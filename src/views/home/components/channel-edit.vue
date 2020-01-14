@@ -48,7 +48,9 @@
 
 <script>
 import { getAllChannels } from '@/api/channel' // 引入获取所有频道接口
+import { setItem } from '@/utils/storage' // 本地存储,将channels存进去;数据持久化
 export default {
+
   data () {
     return {
       allChannels: [], // 所有频道列表
@@ -106,6 +108,15 @@ export default {
       })
       return remainChannels
     }
+  },
+  // 监听channels的变化
+  watch: {
+    // 有两个参数,第一个是新数据,第二个是旧数据;
+    channels (newValue) {
+      // 变化就存到本地;
+      setItem('channels', newValue)
+    }
+
   },
   created () {
     this.loadAllChannels()

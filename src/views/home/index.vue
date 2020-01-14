@@ -39,6 +39,7 @@
 import { getChannels } from '@/api/channel' // 引入频道接口
 import articleList from './components/article-list' // 引入首页面的list文章列表;
 import channelEdit from './components/channel-edit' // 引入弹层频道编辑组件
+import { getItem } from '@/utils/storage' // 引入本地存储,为了获取本地的channels的数据
 export default {
   data () {
     return {
@@ -54,10 +55,25 @@ export default {
   methods: {
     // 获取频道列表
     async getChannelHome () {
+      // 数据持久化操作; 若果本地有就用本地数据,没有就掉接口;
+
       try {
-        const { data } = await getChannels()
-        this.channels = data.data.channels
-        console.log('成功', data)
+        // 1.定义空数组,用于接收本地或接口返回数据;
+        let userChannel = []
+        // 2.调用本地存储的数据
+        const localChannel = getItem('channels')
+        // console.log(localChannel)
+
+        // 3.判断数据有没有
+        if (localChannel) {
+          userChannel = localChannel
+        } else {
+          const { data } = await getChannels()
+          userChannel = data.data.channels
+          console.log('成功', data)
+        }
+        // 将当前组件的channels频道 赋值
+        this.channels = userChannel
       } catch (error) {
         console.log('获取频道失败', error)
       }
@@ -69,6 +85,8 @@ export default {
     }
   },
   created () {
+    console.log(getItem('user'))
+
     if (this.$store.state.user) {
       this.getChannelHome()
     }
