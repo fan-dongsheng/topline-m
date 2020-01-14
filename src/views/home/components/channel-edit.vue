@@ -17,8 +17,16 @@
                 v-for="(item,index) in channels"
                 :key="item.id"
 
-                :text="item.name"
+                @click="userEditChannel(index)"
+
             >
+            <!-- 样式绑定;
+            :class={ 属性名:类名 , 属性值:布尔值} -->
+            <span slot="text" class="text"
+            :class="{
+              active:index===active
+              }"
+            >{{item.name}}</span>
             <van-icon name="close"
             v-show="eidtShow && index !==0"
              slot="icon"/>
@@ -52,6 +60,11 @@ export default {
     channels: {
       type: Array,
       required: true
+    },
+    // 业务:实现编辑频道高亮;
+    active: {
+      type: Number,
+      required: true
     }
   },
   methods: {
@@ -65,6 +78,15 @@ export default {
     addChannel (value) {
       // 点击添加频道推荐到我的频道,点击将当前的value获取,push到数组中;
       this.channels.push(value)
+    },
+    // 点击修改我的频道弹层的展示频道,点击删除或者跳转页面;
+    userEditChannel (index) {
+      if (this.eidtShow && index !== 0) {
+        this.channels.splice(index, 1) // splice数组的删除方法,从下标开始删除,删除几个;
+      } else {
+        // 别的就应该跳转到首页的频道,并改变active;
+        this.$emit('switch', index)
+      }
     }
 
   },
@@ -96,6 +118,7 @@ export default {
 /deep/ .van-grid-item__content{
     background:rgb(212, 209, 209);
     position: relative;
+
     .van-grid-item__icon-wrapper{
         position: absolute;
         top: -10px;
@@ -103,9 +126,17 @@ export default {
 
         .van-icon-close{
             font-size: 14px;
+
         }
 
 }
+.text{
+  font-size: 14px;
+}
+.active{
+  color: red;
+}
+
 }
 
 </style>

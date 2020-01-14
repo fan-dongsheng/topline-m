@@ -9,6 +9,7 @@
             <van-tab v-for="item in channels"
              :key="item.id"
              :title="item.name"
+
              >
              <!-- 将每个频道传给子组件list,让子组件知道是哪个频道数据 -->
              <article-list :channel='item'/>
@@ -24,7 +25,11 @@
           :style="{ height: '90%' }"
         >
         <!-- //弹层编辑组件 -->
-        <channel-edit :channels="channels" />
+        <channel-edit
+         :channels="channels"
+         @switch='trans'
+         :active='active'
+         />
           </van-popup>
   </div>
 </template>
@@ -56,6 +61,11 @@ export default {
       } catch (error) {
         console.log('获取频道失败', error)
       }
+    },
+    // 首页弹层关闭,并传递值,改变频道标签显示; 子传父过来的值,用于改变首页弹层;
+    trans (index) {
+      this.show = false // 关闭弹层;
+      this.active = index // 传递下标,并显示
     }
   },
   created () {
