@@ -11,6 +11,7 @@
         @search="onSearch"
         @cancel="onCancel"
         @focus="showResult=false"
+        @input="onSearchThink"
       />
     </form>
     <!-- /搜索栏 -->
@@ -20,13 +21,15 @@
     <!-- /搜索结果 -->
 
     <!-- 联想建议 -->
-    <van-cell-group v-else-if="searchContent">
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
+    <van-cell-group v-else-if="searchContent" >
+        <!-- //遍历数组 -->
+      <van-cell
+       icon="search"
+       :title="item"
+       v-for="(item,index) in suggestion"
+       :key="index"
+        />
+
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -63,6 +66,7 @@
 
 <script>
 import searchResult from './components/search-result'
+import { getSuggestion } from '@/api/search' // 搜索联想建议
 export default {
   name: 'SearchPage',
   components: {
@@ -72,7 +76,8 @@ export default {
   data () {
     return {
       searchContent: '', // 搜索内容
-      showResult: false // 搜索结果展示
+      showResult: false, // 搜索结果展示
+      suggestion: [] // 搜索联想建议空数组
 
     }
   },
@@ -87,6 +92,19 @@ export default {
     },
     onCancel () {
       console.log('onCancel')
+    },
+    // 联想搜索显示
+    async onSearchThink () {
+      // 1.先判断为空不;
+      const searchContent = this.searchContent
+      if (!searchContent) {
+        return
+      }
+      // 2.调用接口;
+      const { data } = await getSuggestion(searchContent)
+      // 3.绑定数据;
+      this.suggestion = data.data.options
+      console.log(data)
     }
 
   }
