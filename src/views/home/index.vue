@@ -43,7 +43,7 @@ import { getItem } from '@/utils/storage' // 引入本地存储,为了获取本�
 export default {
   data () {
     return {
-      active: 1,
+      active: 0,
       channels: [], // 我的频道列表
       show: false // 弹出层
     }
@@ -85,11 +85,7 @@ export default {
     }
   },
   created () {
-    console.log(getItem('user'))
-
-    if (this.$store.state.user) {
-      this.getChannelHome()
-    }
+    this.getChannelHome()
   }
 
 }
