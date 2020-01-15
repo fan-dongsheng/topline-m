@@ -16,7 +16,9 @@
     </form>
     <!-- /搜索栏 -->
        <!-- 搜索结果 -->
-    <search-result v-if="showResult" />
+    <search-result v-if="showResult"
+        :q="searchContent"
+     />
 
     <!-- /搜索结果 -->
 
@@ -25,7 +27,7 @@
         <!-- //遍历数组 -->
       <van-cell
        icon="search"
-
+        @click="onSearch(item)"
        v-for="(item,index) in suggestion"
        :key="index"
         >
@@ -92,7 +94,11 @@ export default {
   created () {},
   mounted () {},
   methods: {
-    onSearch () {
+    // search 确定搜索时触发,回调参数就是当前输入框的值value
+    onSearch (q) {
+      this.searchContent = q
+
+      // 点击搜索的联想 传值过来,可以改变搜索框的值和掉接口的值
       console.log('onSearch')
       this.showResult = true
     },
