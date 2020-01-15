@@ -25,10 +25,16 @@
         <!-- //遍历数组 -->
       <van-cell
        icon="search"
-       :title="item"
+
        v-for="(item,index) in suggestion"
        :key="index"
-        />
+        >
+        <!-- //高亮显示 -->
+        <div slot="title" v-html="highLight(item)" >
+            {{item}}
+        </div>
+
+        </van-cell>
 
     </van-cell-group>
     <!-- /联想建议 -->
@@ -105,6 +111,21 @@ export default {
       // 3.绑定数据;
       this.suggestion = data.data.options
       console.log(data)
+    },
+    // 联想高亮显示;
+    highLight (item) {
+      // 1.定义变量=搜索内容
+      const searchContent = this.searchContent
+      // 2.replcae 方法替换数字
+      // "Hello World".replace('Hello', '<span style="color: red">Hello</span>')
+      // 需要注意的是，replace 方法的字符串匹配只能替换第1个满足的字符
+      // 3.如果全局替换使用正则表达式
+      // 如果想要全文替换，使用正则表达式
+      // g 全局
+      // i 忽略大小写
+      const reg = new RegExp(searchContent, 'gi') // new一个正则
+
+      return item.replace(reg, `<span style="color:red;">${searchContent}</span>`)
     }
 
   }
