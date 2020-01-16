@@ -76,6 +76,8 @@
 <script>
 import searchResult from './components/search-result'
 import { getSuggestion } from '@/api/search' // 搜索联想建议
+import { debounce } from 'lodash' // 函数防抖处理
+import { setItem, getItem } from '@/utils/storage' // 数据持久化保存;
 export default {
   name: 'SearchPage',
   components: {
@@ -87,13 +89,19 @@ export default {
       searchContent: '', // 搜索内容
       showResult: false, // 搜索结果展示
       suggestion: [], // 搜索联想建议空数组
-      searchHistory: [], // 搜索历史
+      searchHistory: getItem('searchHistory') || [], // 搜索历史,获取本地持久化数据,没有就空数组
       isShowIcon: true // 搜索删除按钮
 
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    // 监听历史记录变化,持久化保存搜索历史数据
+    // 有两个参数,第一个是新数据,第二个是旧数据
+    searchHistory (newVal) {
+      setItem('searchHistory', newVal)
+    }
+  },
   created () {},
   mounted () {},
   methods: {
@@ -116,7 +124,8 @@ export default {
       console.log('onCancel')
     },
     // 联想搜索显示
-    async onSearchThink () {
+    // 防抖处理 debounce
+    onSearchThink: debounce(async function () {
       // 1.先判断为空不;
       const searchContent = this.searchContent
       if (!searchContent) {
@@ -127,7 +136,8 @@ export default {
       // 3.绑定数据;
       this.suggestion = data.data.options
       console.log(data)
-    },
+    }, 300),
+
     // 联想高亮显示;
     highLight (item) {
       // 1.定义变量=搜索内容
