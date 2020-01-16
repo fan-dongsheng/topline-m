@@ -44,27 +44,28 @@
     <!-- 历史记录 -->
     <van-cell-group  v-else>
     <van-cell title="历史记录">
-      <van-icon name="delete" />
-      <span>全部删除</span>
+      <van-icon name="delete"
+
+      @click="isShowIcon=!isShowIcon"
+       v-if="isShowIcon"/>
+
+      <template  v-else>
+      <span @click="searchHistory=[]">全部删除</span>
       &nbsp;&nbsp;
-      <span>完成</span>
+      <span @click="isShowIcon=!isShowIcon">完成</span>
+      </template>
     </van-cell>
 
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
+      <van-cell
+      :title="item"
+      v-for="(item,index) in searchHistory"
+      :key="index"
+      @click="onSearchHistory(item,index)"
+
+      >
+        <van-icon name="close" v-if="!isShowIcon"></van-icon>
       </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
+
     </van-cell-group>
     <!-- /历史记录 -->
 
@@ -85,7 +86,9 @@ export default {
     return {
       searchContent: '', // 搜索内容
       showResult: false, // 搜索结果展示
-      suggestion: [] // 搜索联想建议空数组
+      suggestion: [], // 搜索联想建议空数组
+      searchHistory: [], // 搜索历史
+      isShowIcon: true // 搜索删除按钮
 
     }
   },
@@ -96,9 +99,16 @@ export default {
   methods: {
     // search 确定搜索时触发,回调参数就是当前输入框的值value
     onSearch (q) {
+      // 点击搜索的联想 传值过来,可以改变搜索框的值和掉接口的值
       this.searchContent = q
 
-      // 点击搜索的联想 传值过来,可以改变搜索框的值和掉接口的值
+      // 搜索历史功能添加展示;
+      const index = this.searchHistory.indexOf(q)
+      if (index !== -1) {
+        this.searchHistory.splice(index, 1)
+      }
+      this.searchHistory.unshift(q)
+      // 展示搜索结果
       console.log('onSearch')
       this.showResult = true
     },
@@ -132,6 +142,15 @@ export default {
       const reg = new RegExp(searchContent, 'gi') // new一个正则
 
       return item.replace(reg, `<span style="color:red;">${searchContent}</span>`)
+    },
+    // 删除历史记录;
+    onSearchHistory (item, index) {
+      // 判断如果是true就删除,不是就搜索
+      if (!this.isShowIcon) {
+        this.searchHistory.splice(index, 1) // 数组删除
+      } else {
+        this.onSearch(item)
+      }
     }
 
   }

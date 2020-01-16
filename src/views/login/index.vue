@@ -6,7 +6,7 @@
     <!-- <ValidationProvider>校验组件 -->
     <ValidationObserver ref="form">
           <!-- 注意required|mobile 管道前后不许加空格 -->
-          <ValidationProvider name="手机号" rules="required|mobile" v-slot="{ errors }" immediate>
+          <ValidationProvider name="手机号" rules="required|mobile"  immediate>
                 <van-field
                 v-model="user.mobile"
 
