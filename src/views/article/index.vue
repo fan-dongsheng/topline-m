@@ -11,6 +11,7 @@
 
     <!-- 加载中 -->
     <van-loading
+    v-if="loading"
       class="loading"
       color="#1989fa"
       vertical
@@ -20,41 +21,39 @@
     <!-- /加载中 -->
 
     <!-- 文章详情 -->
-    <div class="detail">
-      <h3 class="title">一个合格的中级前端工程师需要掌握的 28 个 JavaScript 技巧</h3>
+    <!-- 判断article中有没有数据,有就显示,没有就else,随便写一个article.title -->
+    <div class="detail" v-else-if="article.title">
+      <h3 class="title">{{article.title}}</h3>
       <div class="author-wrap">
         <div class="base-info">
           <van-image
             class="avatar"
             round
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="article.aut_photo"
           />
           <div class="text">
-            <p class="name">黑马头条号</p>
-            <p class="time">4 小时前</p>
+            <p class="name">{{article.aut_name}}</p>
+            <p class="time">{{article.pubdate}}</p>
           </div>
         </div>
-        <van-button class="follow-btn" type="info" size="small" round>+ 关注</van-button>
+        <van-button  class="follow-btn" type="info" size="small" round>+ 关注</van-button>
       </div>
-      <div class="markdown-body">
-        <p>作为战斗在业务一线的前端，要想少加班，就要想办法提高工作效率。这里提一个小点，我们在业务开发过程中，经常会重复用到日期格式化、url参数转对象、浏览器类型判断、节流函数等一类函数，这些工具类函数，基本上在每个项目都会用到，为避免不同项目多次复制粘贴的麻烦，我们可以统一封装，发布到npm，以提高开发效率。</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
+      <div class="markdown-body" v-html="article.content">
+
       </div>
     </div>
     <!-- /文章详情 -->
 
     <!-- 加载失败提示 -->
-    <div class="error">
+    <div class="error" v-else>
       <img src="./no-network.png" alt="no-network">
       <p class="text">亲，网络不给力哦~</p>
       <van-button
         class="btn"
         type="default"
         size="small"
+        @click="loadArticleById"
       >点击重试</van-button>
     </div>
     <!-- /加载失败提示 -->
@@ -87,6 +86,7 @@
 </template>
 
 <script>
+import { getArticleById } from '@/api/article'
 export default {
   name: 'ArticlePage',
   components: {},
@@ -97,13 +97,31 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      article: {}, // 文章详情
+      loading: true // 默认加载
+    }
   },
   computed: {},
   watch: {},
-  created () {},
+  created () {
+    this.loadArticleById()
+  },
   mounted () {},
-  methods: {}
+  methods: {
+    // 按id获取文章详情;
+    async loadArticleById () {
+      this.loading = true
+      try {
+        const { data } = await getArticleById(this.articleId)
+        this.article = data.data
+        console.log(data, '文章')
+      } catch (error) {
+        console.log(error, '文章详情失败')
+      }
+      this.loading = false
+    }
+  }
 }
 </script>
 
