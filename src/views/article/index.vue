@@ -71,9 +71,12 @@
         name="comment-o"
         info="9"
       />
+
+      <!-- //收藏判断一下,data中的is_collected是否为false -->
       <van-icon
         color="orange"
-        name="star"
+        :name="article.is_collected? 'star' :'star-o'"
+        @click="onCollect"
       />
       <van-icon
         color="#e5645f"
@@ -86,7 +89,7 @@
 </template>
 
 <script>
-import { getArticleById } from '@/api/article'
+import { getArticleById, getCollect, deleteCollect } from '@/api/article'
 export default {
   name: 'ArticlePage',
   components: {},
@@ -120,6 +123,28 @@ export default {
         console.log(error, '文章详情失败')
       }
       this.loading = false
+    },
+    // 文章收藏
+    async onCollect () {
+      this.$toast.loading({
+        message: '收藏中...',
+        duration: 0, // 持续展示;
+        forbidClick: true // 是否禁止背景点击(继续多次点击)
+      })
+      // 判断如果收藏了就取消, 在后端接口data中有 is_collected:false  代表没收藏
+      try {
+        if (this.article.is_collected) {
+          await deleteCollect(this.articleId)
+          this.article.is_collected = false
+          this.$toast.success('取消收藏成功')
+        } else {
+          await getCollect(this.articleId)
+          this.article.is_collected = true
+          this.$toast.success('收藏成功')
+        }
+      } catch (error) {
+        console.log('收藏操作失败', error)
+      }
     }
   }
 }
