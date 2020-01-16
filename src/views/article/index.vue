@@ -80,7 +80,8 @@
       />
       <van-icon
         color="#e5645f"
-        name="good-job"
+        :name="article.attitude===1?'good-job':'good-job-o'"
+        @click="onLike"
       />
       <van-icon class="share-icon" name="share" />
     </div>
@@ -89,7 +90,7 @@
 </template>
 
 <script>
-import { getArticleById, getCollect, deleteCollect } from '@/api/article'
+import { getArticleById, getCollect, deleteCollect, like, dislike } from '@/api/article'
 export default {
   name: 'ArticlePage',
   components: {},
@@ -144,6 +145,28 @@ export default {
         }
       } catch (error) {
         console.log('收藏操作失败', error)
+      }
+    },
+    // 文章点赞
+    async onLike () {
+      this.$toast.loading({
+        message: '点赞操作中...',
+        duration: 0, // 持续展示;
+        forbidClick: true // 是否禁止背景点击(继续多次点击)
+      })
+      // 判断如果点击了就取消, 在后端接口data中有 attitude:false  代表没收藏
+      try {
+        if (this.article.attitude === 1) {
+          await dislike(this.articleId)
+          this.article.attitude = -1
+          this.$toast.success('取消点赞成功')
+        } else {
+          await like(this.articleId)
+          this.article.attitude = 1
+          this.$toast.success('点赞成功')
+        }
+      } catch (error) {
+        console.log('点赞操作失败', error)
       }
     }
   }
