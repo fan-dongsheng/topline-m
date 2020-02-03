@@ -17,7 +17,7 @@ request.defaults.transformResponse = [function (data) {
   try {
     return jsonBig.parse(data)
   } catch (error) {
-    console.log('转换失败', error)
+    // console.log('转换失败', error)
     return {}
   }
 }]

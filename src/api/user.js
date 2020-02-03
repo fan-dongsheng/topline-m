@@ -29,3 +29,22 @@ export const getUserInfoById = (id) => {
     url: `/app/v1_0/users/${id}`
   })
 }
+// 关注用户
+export const addFollow = (id) => {
+  return request({
+    url: '/app/v1_0/user/followings',
+    method: 'POST',
+    data: {
+      target: id
+    }
+
+  })
+}
+// 取消关注
+export const delFollow = (id) => {
+  return request({
+    url: `/app/v1_0/user/followings/${id}`,
+    method: 'DELETE'
+
+  })
+}

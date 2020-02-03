@@ -18,5 +18,5 @@ export const setItem = (name, value) => {
   window.localStorage.setItem(name, data)
 }
 export const removeItem = () => {
-
+  window.localStorage.removeItem(name)
 }

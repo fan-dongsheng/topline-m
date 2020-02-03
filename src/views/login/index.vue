@@ -96,7 +96,7 @@ export default {
       this.$toast.loading({
         message: '登录中...',
         duration: 0, // 持续展示;
-        forbidClick: true
+        forbidClick: true // 是否禁止背景点击(继续多次点击)
       })
 
       try {

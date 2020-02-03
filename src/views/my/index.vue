@@ -109,17 +109,27 @@ export default {
       }
     },
     // 退出登录
-    outLogin () {
-      this.$dialog.confirm({
+    async outLogin () {
+      await this.$dialog.confirm({
         title: '退出提示',
-        message: '确认退出吗'
-      }).then(() => {
-        // on confirm
-        this.$store.commit('getUserToken', null)
-      }).catch(() => {
-        // on cancel
+        message: '确认退出吗？'
       })
+
+      // 清除登录状态
+      this.$store.commit('getUserToken', null)
     }
+    // outLogin () {
+    //   this.$dialog.confirm({
+    //     title: '退出提示',
+    //     message: '确认退出吗'
+    //   }).then(() => {
+    //     // on confirm
+
+    //     this.$store.commit('getUserToken', null)
+    //   }).catch(() => {
+    //     // on cancel
+    //   })
+    // }
 
   },
   created () {

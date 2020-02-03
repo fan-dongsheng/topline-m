@@ -34,10 +34,15 @@
           />
           <div class="text">
             <p class="name">{{article.aut_name}}</p>
-            <p class="time">{{article.pubdate}}</p>
+            <p class="time">{{article.pubdate | time}}</p>
           </div>
         </div>
-        <van-button  class="follow-btn" type="info" size="small" round>+ 关注</van-button>
+        <van-button  class="follow-btn"
+          v-if="!$store.state.user || article.aut_id!==$store.state.user.id"
+         :type="article.is_followed?'default':'info'"
+         size="small"
+         @click="onFollow"
+         round>{{article.is_followed?'已关注':'+ 关注'}}</van-button>
       </div>
       <div class="markdown-body" v-html="article.content">
 
@@ -91,6 +96,8 @@
 
 <script>
 import { getArticleById, getCollect, deleteCollect, like, dislike } from '@/api/article'
+import { addFollow, delFollow } from '@/api/user'
+import '@/utils/datetime'
 export default {
   name: 'ArticlePage',
   components: {},
@@ -167,6 +174,29 @@ export default {
         }
       } catch (error) {
         console.log('点赞操作失败', error)
+      }
+    },
+    // 关注用户
+    async onFollow () {
+      // this.$toast.loading({
+      //   message: '关注操作中...',
+      //   duration: 0, // 持续展示;
+      //   forbidClick: true // 是否禁止背景点击(继续多次点击)
+      // })
+      // 判断如果点击了就取消, 在后端接口data中有 attitude:false  代表没收藏
+      try {
+        if (this.article.is_followed) {
+          await delFollow(this.article.aut_id)
+
+          this.$toast.success('取消关注成功')
+        } else {
+          await addFollow(this.article.aut_id)
+
+          this.$toast.success('关注成功')
+        }
+        this.article.is_followed = !this.article.is_followed
+      } catch (error) {
+        console.log('关注操作失败', error)
       }
     }
   }

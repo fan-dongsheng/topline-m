@@ -16,3 +16,49 @@ export const getHomeArticle = params => {
     params
   })
 }
+// 文章详情页面
+export const getArticleById = articleId => {
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/articles/${articleId}`
+
+  })
+}
+// 收藏文章
+export const getCollect = (target) => {
+  return request({
+    method: 'POST',
+    url: `/app/v1_0/article/collections`,
+    data: {
+      target
+    }
+
+  })
+}
+// 取消收藏
+export const deleteCollect = (target) => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/collections/${target}`
+
+  })
+}
+// 点赞文章
+export const like = (target) => {
+  return request({
+    method: 'POST',
+    url: `/app/v1_0/article/likings`,
+    data: {
+      target
+    }
+
+  })
+}
+// 取消点赞
+export const dislike = (target) => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/likings/${target}`
+
+  })
+}
