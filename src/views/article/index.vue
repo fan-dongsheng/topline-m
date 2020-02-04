@@ -63,13 +63,32 @@
     </div>
     <!-- /加载失败提示 -->
 
+    <!-- 文章评论组件 -->
+    <div class="comments">
+      <!-- 传id给子组件使用 -->
+      <article-comments :articleId='articleId'  ref="article-comments"/>
+      <!-- ref可以直接拿到组件 -->
+    </div>
+
     <!-- 底部区域 -->
+    <!-- 弹层 -->
+    <van-popup
+      v-model="showPopup"
+      position="bottom"
+      :style="{ height: '20%' }"
+    >
+    <!-- v-model 绑定到组件 相当于
+            :value='message'
+            @input=message -->
+      <post-comment v-model="message"  @click-post='onPost'/>
+    </van-popup>
     <div class="footer">
       <van-button
         class="write-btn"
         type="default"
         round
         size="small"
+        @click="showPopup=true"
       >写评论</van-button>
       <van-icon
         class="comment-icon"
@@ -98,9 +117,16 @@
 import { getArticleById, getCollect, deleteCollect, like, dislike } from '@/api/article'
 import { addFollow, delFollow } from '@/api/user'
 import '@/utils/datetime'
+import articleComments from './components/article-comments' // 评论列表组件
+import postComment from './components/post-comment' // 发表评论的弹层组件
+import { addComments } from '@/api/comment' // 评论发布接口
+
 export default {
   name: 'ArticlePage',
-  components: {},
+  components: {
+    articleComments,
+    postComment
+  },
   props: {
     articleId: {
       type: String,
@@ -110,7 +136,9 @@ export default {
   data () {
     return {
       article: {}, // 文章详情
-      loading: true // 默认加载
+      loading: true, // 默认加载
+      showPopup: false, // 弹层
+      message: '' // 评论的内容
     }
   },
   computed: {},
@@ -198,6 +226,18 @@ export default {
       } catch (error) {
         console.log('关注操作失败', error)
       }
+    },
+    // 发表评论
+    async onPost () {
+      const { data } = await addComments({
+        target: this.articleId,
+        content: this.message
+      })
+      console.log(data)
+      this.message = '' // 清空
+      this.showPopup = false
+      // 用ref拿到组件,将它的new_obj数组加到list,然后放在最前面;
+      this.$refs['article-comments'].list.unshift(data.data.new_obj)
     }
   }
 }
