@@ -66,12 +66,14 @@
     <!-- 文章评论组件 -->
     <div class="comments">
       <!-- 传id给子组件使用 -->
-      <article-comments :articleId='articleId'  ref="article-comments"/>
+      <article-comments
+      @replay-comment="replayComment"
+       :articleId='articleId'  ref="article-comments"/>
       <!-- ref可以直接拿到组件 -->
     </div>
 
     <!-- 底部区域 -->
-    <!-- 弹层 -->
+    <!-- 发表评论弹层 -->
     <van-popup
       v-model="showPopup"
       position="bottom"
@@ -82,6 +84,17 @@
             @input=message -->
       <post-comment v-model="message"  @click-post='onPost'/>
     </van-popup>
+    <!-- 回复评论弹层 -->
+    <van-popup
+    v-model="replayShow"
+    position="bottom"
+    :style="{ height: '90%' }"
+
+  >
+  <comment-replay
+  :articleId='articleId'
+   :comment='currentComment' @click-close='replayShow=false'/>
+  </van-popup>
     <div class="footer">
       <van-button
         class="write-btn"
@@ -120,12 +133,14 @@ import '@/utils/datetime'
 import articleComments from './components/article-comments' // 评论列表组件
 import postComment from './components/post-comment' // 发表评论的弹层组件
 import { addComments } from '@/api/comment' // 评论发布接口
+import commentReplay from './components/comment-replay'
 
 export default {
   name: 'ArticlePage',
   components: {
     articleComments,
-    postComment
+    postComment,
+    commentReplay
   },
   props: {
     articleId: {
@@ -138,7 +153,9 @@ export default {
       article: {}, // 文章详情
       loading: true, // 默认加载
       showPopup: false, // 弹层
-      message: '' // 评论的内容
+      message: '', // 评论的内容
+      replayShow: false, // 回复弹层
+      currentComment: {} // 传过来的值
     }
   },
   computed: {},
@@ -238,6 +255,11 @@ export default {
       this.showPopup = false
       // 用ref拿到组件,将它的new_obj数组加到list,然后放在最前面;
       this.$refs['article-comments'].list.unshift(data.data.new_obj)
+    },
+    // 回复评论
+    replayComment (comment) {
+      this.currentComment = comment
+      this.replayShow = true
     }
   }
 }

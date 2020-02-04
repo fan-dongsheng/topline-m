@@ -6,7 +6,9 @@
         finished-text="没有更多了"
         @load="onLoad"
         >
-        <comment-item v-for="(item,index) in list" :key="index" :title="item.content" :comment='item'/>
+        <comment-item
+        @replay-comment="$emit('replay-comment',$event)"
+        v-for="(item,index) in list" :key="index" :title="item.content" :comment='item'/>
         </van-list>
     </div>
 </template>
