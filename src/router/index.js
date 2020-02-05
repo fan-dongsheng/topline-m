@@ -38,6 +38,11 @@ const routes = [
       }
     ]
   },
+  // 用户资料
+  {
+    path: '/user/profile',
+    component: () => import('@/views/user-profile')
+  },
   // 用户页面路由;
   {
     path: '/user/:id',

@@ -48,3 +48,21 @@ export const delFollow = (id) => {
 
   })
 }
+// 获取用户个人资料
+export const getUserProfile = () => {
+  return request({
+    url: `/app/v1_0/user/profile`,
+    method: 'GET'
+
+  })
+}
+// 更新用户头像
+
+export const userAvatar = (data) => {
+  return request({
+    url: `/app/v1_0/user/photo`,
+    method: 'PATCH',
+    data
+
+  })
+}

@@ -32,7 +32,9 @@
                     <span>{{user.name}}</span>
                     </div>
 
-                    <van-button round type="info" size="small" class="btn" >编辑资料</van-button>
+                    <van-button round type="info" size="small" class="btn"
+                      @click="$router.push('/user/profile')"
+                    >编辑资料</van-button>
                                     </div>
                 <div class="bottom">
                     <div class="bottom-cont">
@@ -91,6 +93,7 @@ export default {
       user: {}
     }
   },
+
   methods: {
 
     login () {
