@@ -23,14 +23,25 @@ import UserArticle from './components/article'
 import CollectArticle from './components/collect'
 import HistoryArticle from './components/history'
 export default {
+  props: {
+    type: {
+      type: String // 接收动态路由参数
+    }
+  },
   components: {
     UserArticle,
     CollectArticle,
     HistoryArticle
   },
   data () {
+    // 点击的进入也免得时候展现当前的active
+    let active = ['collect', 'history'].indexOf(this.type)
+    if (active === -1) {
+      active = 2 // 如果数组没有找到内容,就会返回-1,也就是作品(2)
+    }
     return {
-      active: 0 // 控制激活的标签选项
+
+      active: active// 控制激活的标签选项
     }
   }
 }

@@ -63,19 +63,20 @@ const routes = [
   },
   // 用户作品
   {
-    path: '/my-article',
-    component: () => import('@/views/user-articles')
-  },
-  // 用户收藏
-  {
-    path: '/my-article/collect',
-    component: () => import('@/views/user-articles')
-  },
-  // 用户历史
-  {
-    path: '/my-article/history',
-    component: () => import('@/views/user-articles')
+    path: '/my-article/:type?', // ?代表这个动态参数可有可无
+    component: () => import('@/views/user-articles'),
+    props: true
   }
+  // 用户收藏
+  // {
+  //   path: '/my-article/collect',
+  //   component: () => import('@/views/user-articles')
+  // },
+  // 用户历史
+  // {
+  //   path: '/my-article/history',
+  //   component: () => import('@/views/user-articles')
+  // }
 ]
 
 const router = new VueRouter({
