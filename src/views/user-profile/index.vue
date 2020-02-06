@@ -29,28 +29,94 @@
             />
 
         </van-image-preview>
-      <van-cell title="昵称" :value="user.name" is-link />
-      <van-cell title="性别" :value="user.gender===0?'男':'女' " is-link />
-      <van-cell title="生日" :value="user.birthday" is-link />
+      <van-cell title="昵称" :value="user.name" is-link  @click="nameShow=true"/>
+      <!-- 昵称弹出层 -->
+      <van-popup
+      v-model="nameShow"
+      position="bottom"
+      :style="{ height: '30%' }"
+      class="popname"
+    >
+    <van-nav-bar
+
+            left-text="取消"
+            right-text="确定"
+            title="昵称修改"
+            @click-right="onNameEdit"
+            @click-left="nameShow = false"
+            />
+
+    <van-field
+        v-model="message"
+
+        autosize
+
+        type="textarea"
+        maxlength="20"
+        placeholder="请输入昵称"
+        show-word-limit
+      />
+    </van-popup>
+      <van-cell title="性别" :value="user.gender===0?'男':'女' "
+      @click="genderShow=true"
+      is-link />
+      <van-action-sheet
+      @select="onGenderEdit"
+        v-model="genderShow"
+        :actions="actions"
+        cancel-text="取消"
+        @cancel="genderShow=false"
+      />
+      <van-cell title="生日" :value="user.birthday" is-link  @click="birthdayShow=true"/>
+      <van-popup
+      v-model="birthdayShow"
+      position="bottom"
+      >
+      <van-datetime-picker
+      @confirm="onBirthdayEdit"
+      @cancel="birthdayShow=false"
+        :value="currentDate"
+        type="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+      />
+      </van-popup>
     </van-cell-group>
   </div>
 </template>
 
 <script>
-import { getUserProfile, userAvatar } from '@/api/user'
+import { getUserProfile, userAvatar, upUserProfile } from '@/api/user'
+import moment from 'moment' // 日期
 
 export default {
   data () {
     return {
       user: {}, // 个人用户资料
       images: [], // 图片预览文件
-      Imgshow: false // 图片预览显示
+      Imgshow: false, // 图片预览显示
+      nameShow: false, // 昵称弹出层
+      message: '', // 昵称内容
+      genderShow: false, // 性别显示
+      actions: [ // 性别参数
+        { name: '男', value: 0 },
+        { name: '女', value: 1 }
+
+      ],
+      minDate: new Date(1970, 0, 1),
+      maxDate: new Date(),
+      // currentDate: new Date(),
+      birthdayShow: false // 日期弹层
 
     }
   },
   computed: {
     file () {
       return this.$refs['fileInput']
+    },
+    // 日期改变
+    currentDate () {
+      return new Date(this.user.birthday)
     }
   },
   methods: {
@@ -87,7 +153,37 @@ export default {
       this.user.photo = data.data.photo
       this.Imgshow = false
       this.$toast.success('更新头像成功')
+    },
+    // 更新昵称封装接口
+    async upUserProfile (filed, value) {
+      await upUserProfile({
+        [filed]: value // 如果传key是变量的话 必须加[]
+      })
+    },
+    // 昵称修改
+    async onNameEdit () {
+      await this.upUserProfile('name', this.message)
+      this.user.name = this.message
+      this.nameShow = false
+      this.$toast.success('更新昵称成功')
+    },
+
+    // 性别修改
+    async onGenderEdit (data) {
+      await this.upUserProfile('gender', data.value)
+      this.user.gender = data.value
+      this.$toast.success('更新成功')
+      this.genderShow = false
+    },
+    // 日期修改
+    async onBirthdayEdit (value) {
+      const date = moment(value).format('YYYY-MM-DD')
+      await this.upUserProfile('birthday', date)
+      this.user.birthday = date
+      this.birthdayShow = false
+      this.$toast.success('更新成功')
     }
+
   },
   created () {
     this.getProfile()
@@ -105,6 +201,11 @@ export default {
     .van-nav-bar {
       background: rgb(25, 200, 212);
     }
+  }
+  .popname{
+    .van-nav-bar__text{
+    color: #fff;
+  }
   }
 
 </style>

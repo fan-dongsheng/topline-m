@@ -66,3 +66,12 @@ export const userAvatar = (data) => {
 
   })
 }
+// 更新用户昵称
+export const upUserProfile = (data) => {
+  return request({
+    url: `/app/v1_0/user/profile`,
+    method: 'PATCH',
+    data
+
+  })
+}
