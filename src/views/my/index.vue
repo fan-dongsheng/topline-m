@@ -59,12 +59,12 @@
       <div class="middle">
 
           <van-grid :column-num="3" >
-                <van-grid-item icon="star-o" text="我的收藏" >
+                <van-grid-item icon="star-o" text="我的收藏" to="/my-article/collect">
 
                 </van-grid-item >
 
-                <van-grid-item icon="browsing-history-o" text="浏览历史" />
-                <van-grid-item icon="edit" text="作品" >
+                <van-grid-item icon="browsing-history-o" text="浏览历史" to="/my-article/history" />
+                <van-grid-item icon="edit" text="作品" to="/my-article">
                     <van-icon slot="icon" class-prefix="icon" name="bianji" color="#eb5253" />
                 </van-grid-item >
             </van-grid>

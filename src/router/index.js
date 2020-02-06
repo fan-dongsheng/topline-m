@@ -60,6 +60,21 @@ const routes = [
     component: () => import('@/views/article'),
     props: true // 将路由动态参数映射到组件的 props 中，更推荐这种做法//  就是this.$route.params.id这个
 
+  },
+  // 用户作品
+  {
+    path: '/my-article',
+    component: () => import('@/views/user-articles')
+  },
+  // 用户收藏
+  {
+    path: '/my-article/collect',
+    component: () => import('@/views/user-articles')
+  },
+  // 用户历史
+  {
+    path: '/my-article/history',
+    component: () => import('@/views/user-articles')
   }
 ]
 
