@@ -48,13 +48,27 @@
 
 <script>
 import io from 'socket.io-client'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   data () {
     return {
       message: '',
       socket: null, // 为了方便调用
-      messages: [] // 页面显示数据
+      messages: getItem('chat-messages') || [] // 页面显示数据
     }
+  },
+  watch: {
+    // 数据持久化监听
+    // 两个参数 1:返回来新的数据 2:原来的参数   这里不需要2
+    messages (value) {
+      setItem('chat-messages', value)
+      // 数据变化,让消息滚动到底部
+      // this.$nextTick()  是操作最新的dom变化,因为数据变化是响应式的,但是修改完数据后不及时更新,这就需要next操作最新的dom即时变化
+      this.$nextTick(() => {
+        this.toBottom()
+      })
+    }
+
   },
   created () {
     // 建立连接,webscoket
@@ -90,6 +104,14 @@ export default {
       this.messages.push(data)
 
       this.message = ''
+    },
+    // 消息滚动到最底部
+    toBottom () {
+      // 通过dom.scrollTop=dom.scrollHeight 控制
+      // scrollTop到顶部距离,scrollHeight:当前的高度是多少
+      const ListScroll = this.$refs['message-list'] // 先获取dom元素,消息框
+      ListScroll.scrollTop = ListScroll.scrollHeight
+      // 在watch中使用,数据变化就调用
     }
   }
 
