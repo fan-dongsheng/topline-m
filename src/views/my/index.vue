@@ -73,7 +73,7 @@
       <!-- //消息提示 -->
           <van-cell-group :border="false">
             <van-cell title="消息通知" is-link />
-            <van-cell title="小智同学" is-link />
+            <van-cell title="小智同学"  @click="$router.push('/user/chat')" is-link />
         </van-cell-group>
         <van-button type="default"
         style="width:100%;margin-top:10px;"

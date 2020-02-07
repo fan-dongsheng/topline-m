@@ -43,6 +43,11 @@ const routes = [
     path: '/user/profile',
     component: () => import('@/views/user-profile')
   },
+  // 小智
+  {
+    path: '/user/chat',
+    component: () => import('@/views/user-chat')
+  },
   // 用户页面路由;
   {
     path: '/user/:id',
