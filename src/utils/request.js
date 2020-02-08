@@ -2,6 +2,7 @@
 import axios from 'axios'
 import jsonBig from 'json-bigint' // 处理后端返回数据超出安全整数范围;
 import store from '@/store' // store导出的是store实例组件,可以直接store.state获取  和this.$store一样
+import router from '@/router'
 
 const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/' // 基础路径
@@ -46,7 +47,54 @@ request.interceptors.request.use(
 request.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   return response
-}, function (error) {
+}, async function (error) {
   // 对响应错误做点什么
+  // 响应拦截,如果token过期返回401,就得重新刷新新token
+  // 思路:1.如果没有token或也没有refresh_token,那就直接返回登录页;2.如果有就请求刷新refsh_token;3.存储到容器中;4.重新请求接口
+
+  // 首先判断返回状态
+  if (error.response && error.response.status === 401) {
+    // 1.如果没有token或也没有refresh_token,那就直接返回登录页;
+    const user = store.state.user
+    if (!user || !user.refresh_token) {
+      redirectLogin()
+      return
+    }
+
+    try {
+      // 有refsh_token就重新刷新
+      const { data } = await axios({
+        url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${user.refresh_token}`
+        }
+
+      })
+      // 设置新的token
+      store.commit('getUserToken', {
+        ...user, // 拓展对象符 让user对象中其他的数据不变
+        token: data.data.token // 只更新token
+      })
+      // 再次请求数据,必须返回
+      // error.config包含错误请求所有的配置数据,比如method,url
+      return request(error.config)
+    } catch (error) {
+      redirectLogin()
+    }
+  }
+
   return Promise.reject(error)
 })
+
+// 封装登录页面
+function redirectLogin () {
+  return router.push({
+    name: 'login',
+    // query参数会以?key=value&key=value的格式添加到url后
+    // router.currentRoute.fullPath 代表当前的路由地址   router.currentRoute:当前路由组件
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
+}

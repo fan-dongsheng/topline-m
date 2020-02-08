@@ -8,7 +8,8 @@ const routes = [
   // 登录页面路由
   {
     path: '/login',
-    component: Login
+    component: Login,
+    name: 'login'
   },
   // tab底部导航栏
   {

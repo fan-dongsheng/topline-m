@@ -111,7 +111,9 @@ export default {
         this.$store.commit('getUserToken', userToken)
 
         this.$toast('登录成功')
-        this.$router.push('/')
+        // 处理登录成功后,如果有当前页面就返回当前页面
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.push(redirect)
       } catch (error) {
         console.log('登录失败', error)
         this.$toast('登录失败', '手机号或验证码错误')
