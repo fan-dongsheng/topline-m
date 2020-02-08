@@ -1,6 +1,9 @@
 <template>
   <div class="tabbar">
+    <keep-alive>
       <router-view></router-view>
+    </keep-alive>
+
         <van-tabbar route>
             <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
             <van-tabbar-item icon="search" to="/question">问答</van-tabbar-item>
@@ -12,6 +15,7 @@
 
 <script>
 export default {
+  name: 'TabBar',
   data () {
     return {
 
